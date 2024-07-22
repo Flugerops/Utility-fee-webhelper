@@ -1,0 +1,6 @@
+Flask
+flask-login
+Flask-WTF
+sqlalchemy
+Fastapi
+python-dotenv
