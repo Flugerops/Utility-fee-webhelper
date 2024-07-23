@@ -1,9 +1,8 @@
 from .. import app
 from flask import Flask, render_template, request, redirect, flash, url_for
-from flask_login import current_user, login_required, LoginManager, login_user
+from flask_login import current_user, login_required, LoginManager, login_user, logout_user
 from frontend.forms import RegisterForm, LoginForm
 from sqlalchemy import select
-from flask_login import login_user
 from frontend.db import Session, User
 
 
@@ -25,7 +24,7 @@ def load_user(user_id):
 @app.get('/register')
 def register():
     form = RegisterForm()
-    return render_template('form_template.html', form=form)
+    return render_template('register.html', form=form)
 
 @app.post('/register')
 def register_post():
@@ -43,12 +42,12 @@ def register_post():
            )
            session.add(user)
        return redirect(url_for('login'))
-    return render_template('form_template.html', form=form)
+    return render_template('register.html', form=form)
 
 @app.get('/login')
 def login():
     form = LoginForm()
-    return render_template('form_template.html', form=form)
+    return render_template('login.html', form=form)
 
 @app.post('/login')
 def login_post():
@@ -63,4 +62,10 @@ def login_post():
                 flash("Wrong password")
             else:
                 flash("Wrong nickname")
-    return render_template('form_template.html', form=form)
+    return render_template('login.html', form=form)
+
+@app.get('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
